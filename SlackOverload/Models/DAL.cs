@@ -22,9 +22,13 @@ namespace SlackOverload.Models
             q.Status = 1; //always create status=1
 
             string addQuery = "INSERT INTO Questions (Username, Title, Detail, Posted, Category, Tags, Status) ";
-            addQuery += "VALUES (@Username, @Title, @Detail, @Posted, @Category, @Tags, @Status)"; 
+            addQuery += "VALUES (@Username, @Title, @Detail, @Posted, @Category, @Tags, @Status);";
+            addQuery += "SELECT SCOPE_IDENTITY();";
 
-            return conn.Execute(addQuery, q);
+            //ExecuteScalar returns the first row of the affected rows
+            int newId = conn.ExecuteScalar<int>(addQuery, q);
+
+            return newId;
         }
 
         public IEnumerable<Answer> GetAnswersByQuestionId(int id)

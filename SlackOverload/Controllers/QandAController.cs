@@ -36,10 +36,11 @@ namespace SlackOverload.Controllers
         [HttpPost]
         public IActionResult Add(Question q)
         {
-            int result = dal.CreateQuestion(q);
-            
+            int newId = dal.CreateQuestion(q);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Detail", new { id = newId });
+
+            //return RedirectToAction("Index");
         }
 
         public IActionResult Detail(int id) {
