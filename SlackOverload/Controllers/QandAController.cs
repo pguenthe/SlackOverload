@@ -5,16 +5,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using SlackOverload.Models;
+using SlackOverload.Services;
 
 namespace SlackOverload.Controllers
 {
     public class QandAController : Controller
     {
-        private DAL dal;
+        private IDAL dal;
 
-        public QandAController(IConfiguration config)
+        public QandAController(IDAL dalObject)
         {
-            dal = new DAL(config.GetConnectionString("default"));
+            dal = dalObject;   
         }
 
         public IActionResult Index()
@@ -36,7 +37,15 @@ namespace SlackOverload.Controllers
         [HttpPost]
         public IActionResult Add(Question q)
         {
+            //TODO: Validate before submitting
+            // Then I can get the user a more detailed message: What's missing?
             int newId = dal.CreateQuestion(q);
+
+            if (newId == -1)
+            {
+                ViewData["ErrorMsg"] = "There was an errror. Please check your form for missing information.";
+                return View("Add", q);//pre-fill the user's info received
+            }
 
             return RedirectToAction("Detail", new { id = newId });
 

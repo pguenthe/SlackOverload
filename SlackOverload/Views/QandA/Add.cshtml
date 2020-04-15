@@ -4,6 +4,10 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+@if (ViewData["ErrorMsg"] != null)
+{
+    <p class="alert">@ViewData["ErrorMsg"]</p>
+}
 Please add your question:
 <form asp-controller="QandA" asp-action="Add" method="post">
     <p>

@@ -5,17 +5,25 @@
 }
 
 <h1>Recent Questions</h1>
-@foreach (Question q in Questions)
+@if (Questions == null)
 {
-    <h3><a href="/QandA/Detail/@q.Id">@q.Title</a></h3>
-    @if (q.Detail.Length > 100)
+    <h3>Database error</h3>
+    <p>There was a problem with the database. If this persists, please contact...</p>
+}
+else
+{
+    foreach (Question q in Questions)
     {
-        <div>@q.Detail.Substring(0, 100) ...</div>
+        <h3><a href="/QandA/Detail/@q.Id">@q.Title</a></h3>
+        @if (q.Detail.Length > 100)
+        {
+            <div>@q.Detail.Substring(0, 100) ...</div>
+        }
+        else
+        {
+            <div>@q.Detail</div>
+        }
+        @q.Username
     }
-    else
-    {
-        <div>@q.Detail</div>
-    }
-    @q.Username
 }
 
